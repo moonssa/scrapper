@@ -1,33 +1,13 @@
-import requests;
-from bs4 import BeautifulSoup
+from indeed import extra_indeed_pages, extract_indeed_jobs
 
-result = requests.get("https://kr.indeed.com/jobs?q=python&limit=50");
 
-indeed_soup = BeautifulSoup(result.text, "html.parser");
-#print(indeed_soup);
+max_page = extra_indeed_pages()
+print(max_page);
 
-pagination = indeed_soup.find("ul", {"class":"pagination-list"});
-print(pagination);
+# for n in range(max_page):
+#     print(f"start")
 
-pages = pagination.find_all("a")
-
-print(pages)
-
-spans=[]
-for page in pages:
-    print(page);
-    print("*********");
-    print(page.find("span").string)
-    spans.append(page.find("span").string)
-
-print(spans);
-spans = list(map(int,spans[0:-1]))
-
-max_page = spans[-1];
-
-for n in range(max_page):
-    print(f"start")
-
+extract_indeed_jobs(max_page)
 
 
 

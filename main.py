@@ -1,12 +1,6 @@
-from indeed import extra_indeed_pages, extract_indeed_jobs
+from indeed import get_jobs as get_indeed_jobs
 
 
-max_page = extra_indeed_pages()
-print(max_page);
-
-
-extract_indeed_jobs(max_page)
-
-
-
-
+indeed_jobs = get_indeed_jobs()
+for num, job in enumerate(indeed_jobs):
+    print(num, job, sep="-")

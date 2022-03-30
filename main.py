@@ -5,6 +5,7 @@ from so_scrapper import get_jobs
 
 app = Flask("SuperScrapper")
 
+db = {}
 @app.route("/")
 def home():
     return render_template("potato.html")
@@ -15,14 +16,19 @@ def potato(username):
 
 @app.route("/report")
 def report():
-    
     word = request.args.get('word')
     if word:
         word=word.lower()
-        get_jobs(word)
+        fromDB= db.get(word)
+        if fromDB:
+            jobs = fromDB
+        else:
+            jobs= get_jobs(word)
+            db[word]= jobs    
     else:
         return redirect('/')
     print(word)
-    return render_template("report.html", searchingKey=word)
+    return render_template("report.html", 
+    searchingKey=word, resultNumber=len(jobs))
 
 app.run(host="0.0.0.0") 

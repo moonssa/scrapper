@@ -1,4 +1,3 @@
-from xmlrpc.client import FastMarshaller
 import requests
 from bs4 import BeautifulSoup
 
@@ -6,8 +5,8 @@ from bs4 import BeautifulSoup
 URL = f"https://stackoverflow.com/jobs?q=python"
 
 
-def extra_pages():
-    result = requests.get(URL)
+def extra_pages(url):
+    result = requests.get(url)
     soup = BeautifulSoup(result.text, "html.parser")
 
     pagination = soup.find("div", {"class": "s-pagination"})
@@ -52,8 +51,9 @@ def extract_jobs(last_page):
     return jobs
 
 
-def get_jobs():
-    max_page = extra_pages()
+def get_jobs(word):
+    url = f"https://stackoverflow.com/jobs?q={word}"
+    max_page = extra_pages(url)
     jobs = extract_jobs(max_page)
 
     return jobs

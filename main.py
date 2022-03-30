@@ -1,10 +1,28 @@
-from indeed import get_jobs as get_indeed_jobs
-from so import get_jobs as get_so_jobs
-from save import save_to_file
+import requests
+from bs4 import BeautifulSoup
+from flask import Flask, render_template, request, redirect
+from so_scrapper import get_jobs
 
-indeed_jobs = get_indeed_jobs()
-so_jobs = get_so_jobs()
+app = Flask("SuperScrapper")
 
-jobs = indeed_jobs + so_jobs
-print(jobs)
-save_to_file(jobs)
+@app.route("/")
+def home():
+    return render_template("potato.html")
+
+@app.route("/<username>")
+def potato(username):
+    return "<h1> 안녕 반가워 ${username}</h1>"
+
+@app.route("/report")
+def report():
+    
+    word = request.args.get('word')
+    if word:
+        word=word.lower()
+        get_jobs(word)
+    else:
+        return redirect('/')
+    print(word)
+    return render_template("report.html", searchingKey=word)
+
+app.run(host="0.0.0.0") 
